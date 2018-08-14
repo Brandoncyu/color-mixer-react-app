@@ -16,6 +16,21 @@ class App extends Component {
     }
   }
 
+  selectColor = (index) => {
+    const newColors = [ ...this.state.colors ]
+    newColors[index].selected = !newColors[index].selected
+    this.setState({ colors: newColors })
+  }
+
+  addColor = ({value, name}) => {
+    const newColor = { value, name, selected: false }
+    this.setState({
+      colors: [
+        ...this.state.colors, newColor
+      ]
+    })
+  }
+
   render() {
     return (
       <main>
@@ -29,7 +44,7 @@ class App extends Component {
           <div className="row">
             <div className="col-3">
               <h2 className="h4 text-center mb-4">Colors</h2>
-              <ColorList colors={ this.state.colors } />
+              <ColorList colors={ this.state.colors } selectColor={ this.selectColor } />
             </div>
             <div className="col">
               <h2 className="h4 text-center mb-4">Mix Result</h2>
@@ -37,7 +52,7 @@ class App extends Component {
             </div>
             <div className="col-3">
               <h2 className="h4 text-center mb-4">Add a Color</h2>
-              <ColorForm />
+              <ColorForm addColor={ this.addColor } />
             </div>
           </div>
         </div>
