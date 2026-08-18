@@ -2,24 +2,19 @@ import React, { Component } from 'react'
 import ColorList from './components/ColorList'
 import ColorForm from './components/ColorForm'
 import ColorMixer from './components/ColorMixer'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import { toggleColor } from './actions/colors'
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
 
-class App extends Component {
-  constructor () {
-    super()
-    this.state = {
-      colors: [
-        { value: '#ff0000', name: 'Red', selected: false },
-        { value: '#00ff00', name: 'Green', selected: false },
-        { value: '#0000ff', name: 'Blue', selected: false }
-      ]
-    }
-  }
+const mapStateToProps = ({colors}) => ({colors})
+const mapDispatchToProps = (dispatch) => bindActionCreators({
+  toggleColor
+}, dispatch)
 
+class App extends Component {
   selectColor = (index) => {
-    const newColors = [ ...this.state.colors ]
-    newColors[index].selected = !newColors[index].selected
-    this.setState({ colors: newColors })
+    this.props.toggleColor(index)
   }
 
   addColor = ({value, name}) => {
@@ -44,11 +39,11 @@ class App extends Component {
           <div className="row">
             <div className="col-3">
               <h2 className="h4 text-center mb-4">Colors</h2>
-              <ColorList colors={ this.state.colors } selectColor={ this.selectColor } />
+              <ColorList colors={ this.props.colors } selectColor={ this.selectColor } />
             </div>
             <div className="col">
               <h2 className="h4 text-center mb-4">Mix Result</h2>
-              <ColorMixer colors={ this.state.colors } />
+              <ColorMixer colors={ this.props.colors } />
             </div>
             <div className="col-3">
               <h2 className="h4 text-center mb-4">Add a Color</h2>
@@ -61,4 +56,4 @@ class App extends Component {
   }
 }
 
-export default App
+export default connect(mapStateToProps, mapDispatchToProps)(App)
